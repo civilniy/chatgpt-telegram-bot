@@ -62,3 +62,38 @@ class MemoryStore:
                 (self.owner_id,)
             ).fetchone()
             return row is not None
+
+    def dedupe_profiles(self) -> tuple[int, int]:
+        """
+        Remove duplicate 'profile' rows for this owner_id.
+        Keeps one copy of each unique content (prefer higher importance, then newer).
+        Returns: (kept, deleted)
+        """
+        with self._conn() as c:
+            rows = c.execute(
+                """
+                SELECT id, content, importance, created_at
+                FROM memories
+                WHERE owner_id=? AND kind='profile'
+                ORDER BY importance DESC, created_at DESC
+                """,
+                (self.owner_id,)
+            ).fetchall()
+
+            seen = set()
+            keep_ids = []
+            delete_ids = []
+
+            for _id, content, imp, created_at in rows:
+                key = (content or "").strip()
+                if key in seen:
+                    delete_ids.append(_id)
+                else:
+                    seen.add(key)
+                    keep_ids.append(_id)
+
+            if delete_ids:
+                placeholders = ",".join(["?"] * len(delete_ids))
+                c.execute(f"DELETE FROM memories WHERE id IN ({placeholders})", delete_ids)
+
+            return (len(keep_ids), len(delete_ids))
