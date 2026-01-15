@@ -97,3 +97,13 @@ class MemoryStore:
                 c.execute(f"DELETE FROM memories WHERE id IN ({placeholders})", delete_ids)
 
             return (len(keep_ids), len(delete_ids))
+
+    def delete_profiles(self) -> int:
+        """Delete all profile rows for this owner. Returns deleted count."""
+        with self._conn() as c:
+            cur = c.execute(
+                "DELETE FROM memories WHERE owner_id=? AND kind='profile'",
+                (self.owner_id,)
+            )
+            return int(cur.rowcount or 0)
+
