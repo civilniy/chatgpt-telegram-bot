@@ -36,6 +36,10 @@ def default_max_tokens(model: str) -> int:
     :return: The default number of max tokens
     """
     base = 1200
+
+    # GPT-5 family (safe defaults)
+    if model in ["gpt-5.2", "gpt-5.2-pro", "gpt-5-mini"]:
+        return 8192
     if model in GPT_3_MODELS:
         return base
     elif model in GPT_4_MODELS:
