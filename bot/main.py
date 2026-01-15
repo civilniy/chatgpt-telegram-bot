@@ -49,11 +49,11 @@ def main():
     memory = MemoryStore(db_path=db_path, owner_id=owner_id)
 
         # Seed base knowledge (profile v1)
-    memory.add("profile", "Sergei (Telegram user_id: 238934709). Speaks Russian. Calls assistant 'Mark'. Prefers direct, friendly, non-corporate style.", "identity,style", 5)
-    memory.add("profile", "Runs Kixbox: e-commerce fashion + retail stores. Focus on margins, logistics, pricing, analytics.", "kixbox", 5)
-    memory.add("profile", "Operations: warehouse in Podolsk, drivers, daily store replenishment, Yandex Market.", "ops", 4)
-    memory.add("profile", "Creative: jewelry brand (silver + raw stones), minimalist premium aesthetic. Uses AI, Obsidian, Excel.", "creative", 4)
-
+    memory.add("profile", "Сергей. Управляет e-commerce и розничным бизнесом Kixbox. Думает категориями маржи, денег, эффективности и процессов.", "identity", 5)
+    memory.add("profile", "Kixbox — fashion retail и e-commerce: собственный сайт, маркетплейсы, розничные магазины. Сергей отвечает за цены, маржу, ассортимент и экономику.", "kixbox", 5)
+    memory.add("profile", "Логистика: склад в Подольске, собственные водители, ежедневные рейсы по магазинам и между складом и Москвой. Сергей считает стоимость точек, маршрутов и времени.", "ops", 4)
+    memory.add("profile", "Творческая часть: ювелирный бренд (серебро и необработанные камни) в минималистичном премиальном стиле. Использует AI, визуальные генерации, Obsidian и Excel.", "creative", 4)
+    memory.add("profile", "Марк — не бот, а партнёр Сергея: второй мозг, COO и CFO, который помогает считать, думать, находить риски и принимать лучшие решения.", "relationship", 5)
     
         # Start minimal HTTP server for Render (needs an open port)
     threading.Thread(target=start_health_server, daemon=True).start()
