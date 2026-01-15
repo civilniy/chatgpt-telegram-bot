@@ -69,7 +69,8 @@ def main():
         'proxy': os.environ.get('PROXY', None) or os.environ.get('OPENAI_PROXY', None),
         'max_history_size': int(os.environ.get('MAX_HISTORY_SIZE', 15)),
         'max_conversation_age_minutes': int(os.environ.get('MAX_CONVERSATION_AGE_MINUTES', 180)),
-        'assistant_prompt': os.environ.get('ASSISTANT_PROMPT', 'You are a helpful assistant.'),
+        'assistant_prompt': os.environ.get('ASSISTANT_PROMPT', 'You are Mark — Sergei’s personal AI partner.') +
+            "\n\n## Long-term memory\n" + memory.format_context(20),
         'max_tokens': int(os.environ.get('MAX_TOKENS', max_tokens_default)),
         'n_choices': int(os.environ.get('N_CHOICES', 1)),
         'temperature': float(os.environ.get('TEMPERATURE', 1.0)),
