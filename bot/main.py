@@ -43,6 +43,18 @@ def main():
         logging.error(f'The following environment values are missing in your .env: {", ".join(missing_values)}')
         exit(1)
 
+        # Initialize persistent memory
+    owner_id = int(os.environ.get("OWNER_TELEGRAM_ID", "238934709"))
+    db_path = os.environ.get("MEMORY_DB_PATH", "/var/data/memory.db")
+    memory = MemoryStore(db_path=db_path, owner_id=owner_id)
+
+        # Seed base knowledge (profile v1)
+    memory.add("profile", "Sergei (Telegram user_id: 238934709). Speaks Russian. Calls assistant 'Mark'. Prefers direct, friendly, non-corporate style.", "identity,style", 5)
+    memory.add("profile", "Runs Kixbox: e-commerce fashion + retail stores. Focus on margins, logistics, pricing, analytics.", "kixbox", 5)
+    memory.add("profile", "Operations: warehouse in Podolsk, drivers, daily store replenishment, Yandex Market.", "ops", 4)
+    memory.add("profile", "Creative: jewelry brand (silver + raw stones), minimalist premium aesthetic. Uses AI, Obsidian, Excel.", "creative", 4)
+
+    
         # Start minimal HTTP server for Render (needs an open port)
     threading.Thread(target=start_health_server, daemon=True).start()
 
