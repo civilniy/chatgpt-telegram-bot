@@ -679,6 +679,13 @@ class ChatGPTTelegramBot:
                 mem = self.openai.memory.format_context(30)
                 await update.message.reply_text(mem or "Память пуста.")
                 return
+
+            # Dedupe profile rows
+            if text.lower() in ["очисти дубликаты профиля", "очистить дубликаты профиля"]:
+                kept, deleted = self.openai.memory.dedupe_profiles()
+                await update.message.reply_text(f"Готово. Профиль: оставил {kept}, удалил дублей {deleted}.")
+                return
+
         # --- End memory commands ---
 
 
