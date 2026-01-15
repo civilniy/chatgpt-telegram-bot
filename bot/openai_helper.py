@@ -658,11 +658,11 @@ class OpenAIHelper:
             encoding = tiktoken.get_encoding("o200k_base")
 
         if model in GPT_ALL_MODELS:
-        tokens_per_message = 3
-        tokens_per_name = 1
-    else:
-        # gpt-5.x and other new models — token counting not supported, skip counting
-        return 0
+            tokens_per_message = 3
+            tokens_per_name = 1
+        else:
+            # gpt-5.x and other new models — token counting not supported, skip counting
+            return 0
         num_tokens = 0
         for message in messages:
             num_tokens += tokens_per_message
