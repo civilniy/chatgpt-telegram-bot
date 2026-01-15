@@ -622,6 +622,11 @@ class OpenAIHelper:
 
     def __max_model_tokens(self):
         base = 4096
+        model = self.config['model']
+
+    # GPT-5 family — safe default context
+        if model.startswith("gpt-5"):
+            return 128_000
         if self.config['model'] in GPT_3_MODELS:
             return base
         if self.config['model'] in GPT_3_16K_MODELS:
