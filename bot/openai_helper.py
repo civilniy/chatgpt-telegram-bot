@@ -265,6 +265,11 @@ class OpenAIHelper:
                 if len(functions) > 0:
                     common_args['functions'] = self.plugin_manager.get_functions_specs()
                     common_args['function_call'] = 'auto'
+            logging.info(
+                f"[OPENAI] model={common_args.get('model')} "
+                f"param_used={'max_completion_tokens' if 'max_completion_tokens' in common_args else 'max_tokens'} "
+                f"max={common_args.get('max_completion_tokens', common_args.get('max_tokens'))}"
+                )
             return await self.client.chat.completions.create(**common_args)
 
         except openai.RateLimitError as e:
