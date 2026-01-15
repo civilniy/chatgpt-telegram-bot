@@ -660,6 +660,28 @@ class ChatGPTTelegramBot:
         prompt = message_text(update.message)
         self.last_message[chat_id] = prompt
 
+        # --- Memory commands ---
+        if str(user_id) == os.environ.get("OWNER_TELEGRAM_ID", "238934709"):
+            text = prompt.strip()
+
+            # Save memory
+            if text.lower().startswith("запомни:"):
+                content = text[len("запомни:"):].strip()
+                if content:
+                    self.openai.memory.add("fact", content, "user", 4)
+                    await update.message.reply_text("Запомнил.")
+                else:
+                    await update.message.reply_text("Напиши, что именно нужно запомнить.")
+                return
+
+            # Show memory
+            if text.lower() in ["покажи память", "memory", "память"]:
+                mem = self.openai.memory.format_context(30)
+                await update.message.reply_text(mem or "Память пуста.")
+                return
+        # --- End memory commands ---
+
+
         if is_group_chat(update):
             trigger_keyword = self.config['group_trigger_keyword']
 
