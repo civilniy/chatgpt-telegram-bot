@@ -686,6 +686,19 @@ class ChatGPTTelegramBot:
                 await update.message.reply_text(f"Готово. Профиль: оставил {kept}, удалил дублей {deleted}.")
                 return
 
+            # Recreate profile (delete old EN + seed RU from code)
+            if text.lower() in ["пересоздай профиль", "пересоздать профиль"]:
+                deleted = self.openai.memory.delete_profiles()
+
+                # Seed RU profile again
+                self.openai.memory.add("profile", "Сергей. Управляет e-commerce и розничным бизнесом Kixbox. Думает категориями маржи, денег, эффективности и процессов.", "identity", 5)
+                self.openai.memory.add("profile", "Kixbox — fashion retail и e-commerce: собственный сайт, маркетплейсы, розничные магазины. Сергей отвечает за цены, маржу, ассортимент и экономику.", "kixbox", 5)
+                self.openai.memory.add("profile", "Логистика: склад в Подольске, собственные водители, ежедневные рейсы по магазинам и между складом и Москвой. Сергей считает стоимость точек, маршрутов и времени.", "ops", 4)
+                self.openai.memory.add("profile", "Творческая часть: ювелирный бренд (серебро и необработанные камни) в минималистичном премиальном стиле. Использует AI, визуальные генерации, Obsidian и Excel.", "creative", 4)
+                self.openai.memory.add("profile", "Марк — не бот, а партнёр Сергея: второй мозг, COO и CFO, который помогает считать, думать, находить риски и принимать лучшие решения.", "relationship", 5)
+
+                await update.message.reply_text(f"Готово. Удалил старых профилей: {deleted}. Записал новый русский профиль.")
+                return
         # --- End memory commands ---
 
 
