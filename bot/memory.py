@@ -54,3 +54,11 @@ class MemoryStore:
         for _id, kind, content, imp in rows:
             lines.append(f"- [{kind}][imp:{imp}] {content}")
         return "\n".join(lines)
+
+    def has_profile(self) -> bool:
+        with self._conn() as c:
+            row = c.execute(
+                "SELECT 1 FROM memories WHERE owner_id=? AND kind='profile' LIMIT 1",
+                (self.owner_id,)
+            ).fetchone()
+            return row is not None
