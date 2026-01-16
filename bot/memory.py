@@ -107,3 +107,49 @@ class MemoryStore:
             )
             return int(cur.rowcount or 0)
 
+    
+    def delete_duplicates(self, kind: str | None = None) -> int:
+        """
+        Удаляет дубликаты (одинаковые kind+content+tags), оставляя самую свежую запись.
+        Возвращает количество удалённых строк.
+        """
+        with self._conn() as c:
+            if kind:
+                cur = c.execute("""
+                    DELETE FROM memories
+                    WHERE id NOT IN (
+                        SELECT MAX(id)
+                        FROM memories
+                        WHERE owner_id = ?
+                          AND kind = ?
+                        GROUP BY owner_id, kind, content, tags
+                    )
+                    AND owner_id = ?
+                      AND kind = ?
+                """, (self.owner_id, kind, self.owner_id, kind))
+            else:
+                cur = c.execute("""
+                    DELETE FROM memories
+                    WHERE id NOT IN (
+                        SELECT MAX(id)
+                        FROM memories
+                        WHERE owner_id = ?
+                        GROUP BY owner_id, kind, content, tags
+                    )
+                    AND owner_id = ?
+                """, (self.owner_id, self.owner_id))
+            return cur.rowcount
+
+    def delete_exact(self, kind: str, content: str) -> int:
+        """
+        Удаляет ВСЕ записи с exact совпадением kind+content у текущего owner.
+        """
+        with self._conn() as c:
+            cur = c.execute("""
+                DELETE FROM memories
+                WHERE owner_id = ?
+                  AND kind = ?
+                  AND content = ?
+            """, (self.owner_id, kind, content))
+            return cur.rowcount
+
