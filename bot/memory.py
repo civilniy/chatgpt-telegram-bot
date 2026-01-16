@@ -108,7 +108,7 @@ class MemoryStore:
             return int(cur.rowcount or 0)
 
     
-    def delete_duplicates(self, kind: str | None = None) -> int:
+    def delete_duplicates(self, kind: Optional[str] = None) -> int:
         """
         Удаляет дубликаты (одинаковые kind+content+tags), оставляя самую свежую запись.
         Возвращает количество удалённых строк.
