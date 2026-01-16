@@ -669,7 +669,7 @@ class ChatGPTTelegramBot:
                 content = text[len("запомни:"):].strip()
                 if content:
                     self.openai.memory.add("fact", content, "user", 4)
-                    await update.message.reply_text("Запомнил.")
+                    await update.message.reply_text("Запомнил")
                 else:
                     await update.message.reply_text("Напиши, что именно нужно запомнить.")
                 return
@@ -677,13 +677,13 @@ class ChatGPTTelegramBot:
             # Show memory
             if text.lower() in ["покажи память", "memory", "память"]:
                 mem = self.openai.memory.format_context(30)
-                await update.message.reply_text(mem or "Память пуста.")
+                await update.message.reply_text(mem or "Память пуста")
                 return
 
             # Dedupe profile rows
             if text.lower() in ["очисти дубликаты профиля", "очистить дубликаты профиля"]:
                 kept, deleted = self.openai.memory.dedupe_profiles()
-                await update.message.reply_text(f"Готово. Профиль: оставил {kept}, удалил дублей {deleted}.")
+                await update.message.reply_text(f"Готово. Профиль: оставил {kept}, удалил дублей {deleted}")
                 return
 
             # Full dedupe (all kinds)
