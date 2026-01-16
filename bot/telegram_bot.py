@@ -686,6 +686,12 @@ class ChatGPTTelegramBot:
                 await update.message.reply_text(f"Готово. Профиль: оставил {kept}, удалил дублей {deleted}.")
                 return
 
+            # Full dedupe (all kinds)
+            if text.lower() in ["очисти дубликаты", "дедуп"]:
+                deleted = self.openai.memory.delete_duplicates(kind=None)
+                await update.message.reply_text(f"Готово. Удалил дубликатов: {deleted}")
+                return
+
             # Recreate profile (delete old EN + seed RU from code)
             if text.lower() in ["пересоздай профиль", "пересоздать профиль"]:
                 deleted = self.openai.memory.delete_profiles()
