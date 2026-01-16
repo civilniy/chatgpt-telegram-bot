@@ -705,6 +705,13 @@ class ChatGPTTelegramBot:
 
                 await update.message.reply_text(f"Готово. Удалил старых профилей: {deleted}. Записал новый русский профиль.")
                 return
+
+            # Delete all facts
+            if text.lower() in ["очистить факты", "удалить факты"]:
+                deleted = self.openai.memory.delete_facts()
+                await update.message.reply_text(f"Готово. Удалил фактов: {deleted}")
+                return
+
         # --- End memory commands ---
 
 
