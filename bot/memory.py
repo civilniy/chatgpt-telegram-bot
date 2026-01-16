@@ -50,9 +50,10 @@ class MemoryStore:
         rows = self.latest(limit)
         if not rows:
             return ""
+
         lines = []
         for _id, kind, content, imp in rows:
-            lines.append(f"- [{kind}][imp:{imp}] {content}")
+            lines.append(f"- [#{_id}][{kind}][imp:{imp}] {content}")
         return "\n".join(lines)
 
     def has_profile(self) -> bool:
