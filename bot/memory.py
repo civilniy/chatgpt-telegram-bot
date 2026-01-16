@@ -153,3 +153,12 @@ class MemoryStore:
             """, (self.owner_id, kind, content))
             return cur.rowcount
 
+    def delete_facts(self) -> int:
+        """Удаляет все записи kind='fact' для текущего owner."""
+        with self._conn() as c:
+            cur = c.execute(
+                "DELETE FROM memories WHERE owner_id=? AND kind='fact'",
+                    (self.owner_id,))
+            return int(cur.rowcount or 0)
+
+
