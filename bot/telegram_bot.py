@@ -712,25 +712,6 @@ class ChatGPTTelegramBot:
                 await update.message.reply_text(f"Готово. Удалил фактов: {deleted}")
                 return
 
-            # Delete memory by id (e.g. "удали #123" / "delete #123")
-            low = text.lower().strip()
-            if low.startswith("удали") or low.startswith("delete"):
-                # ищем #123 в тексте
-                import re
-                m = re.search(r"#\s*(\d+)", text)
-                if not m:
-                    await update.message.reply_text("Напиши так: удали #123")
-                    return
-
-    mem_id = int(m.group(1))
-    deleted = self.openai.memory.delete_by_id(mem_id)
-    if deleted:
-        await update.message.reply_text(f"Удалил: #{mem_id}")
-    else:
-        await update.message.reply_text(f"Не нашёл (или уже удалено): #{mem_id}")
-    return
-
-
         # --- End memory commands ---
 
 
