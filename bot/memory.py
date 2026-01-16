@@ -162,4 +162,14 @@ class MemoryStore:
                     (self.owner_id,))
             return int(cur.rowcount or 0)
 
+    def delete_by_id(self, mem_id: int) -> int:
+        """Удаляет запись памяти по её ID. Возвращает количество удалённых строк (0 или 1)."""
+        with self._conn() as c:
+            cur = c.execute(
+                "DELETE FROM memories WHERE owner_id=? AND id=?",
+                (self.owner_id, int(mem_id))
+            )
+            return int(cur.rowcount or 0)
+
+
 
