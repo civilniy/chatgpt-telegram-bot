@@ -734,23 +734,23 @@ class ChatGPTTelegramBot:
         # --- End memory commands ---
 
 
-        if is_group_chat(update):
-            trigger_keyword = self.config['group_trigger_keyword']
+    if is_group_chat(update):
+        trigger_keyword = self.config['group_trigger_keyword']
 
-            if prompt.lower().startswith(trigger_keyword.lower()) or update.message.text.lower().startswith('/chat'):
-                if prompt.lower().startswith(trigger_keyword.lower()):
-                    prompt = prompt[len(trigger_keyword):].strip()
+        if prompt.lower().startswith(trigger_keyword.lower()) or update.message.text.lower().startswith('/chat'):
+            if prompt.lower().startswith(trigger_keyword.lower()):
+                prompt = prompt[len(trigger_keyword):].strip()
 
-                if update.message.reply_to_message and \
-                        update.message.reply_to_message.text and \
-                        update.message.reply_to_message.from_user.id != context.bot.id:
-                    prompt = f'"{update.message.reply_to_message.text}" {prompt}'
+            if update.message.reply_to_message and \
+                    update.message.reply_to_message.text and \
+                    update.message.reply_to_message.from_user.id != context.bot.id:
+                prompt = f'"{update.message.reply_to_message.text}" {prompt}'
+        else:
+            if update.message.reply_to_message and update.message.reply_to_message.from_user.id == context.bot.id:
+                logging.info('Message is a reply to the bot, allowing...')
             else:
-                if update.message.reply_to_message and update.message.reply_to_message.from_user.id == context.bot.id:
-                    logging.info('Message is a reply to the bot, allowing...')
-                else:
-                    logging.warning('Message does not start with trigger keyword, ignoring...')
-                    return
+                logging.warning('Message does not start with trigger keyword, ignoring...')
+                return
 
         try:
             total_tokens = 0
