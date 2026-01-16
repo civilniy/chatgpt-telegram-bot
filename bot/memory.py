@@ -1,7 +1,7 @@
 import os
 import sqlite3
 import time
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 class MemoryStore:
     def __init__(self, db_path: str, owner_id: int):
